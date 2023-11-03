@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Project Management Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+
+    #task-container {
+      background-color: #ffffff;
+      border-radius: 5px;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    #task-list, #user-task-list {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #task-input, #assignee-select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+    }
+
+    #add-task-btn {
+      background-color: #4caf50;
+      color: #ffffff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    #user-task-section {
+      margin-top: 20px;
+    }
+
+    /* Responsive Styles */
+    @media screen and (max-width: 600px) {
+      #task-container {
+        padding: 10px;
+      }
+
+      #task-input, #assignee-select {
+        font-size: 14px;
+      }
+
+      #add-task-btn {
+        font-size: 12px;
+      }
+
+      #user-task-list {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center; color: #333333;">Project Management Tool</h1>
+  
+  <div id="task-container">
+    <h2 style="color: #333333;">Task List</h2>
+    <ul id="task-list"></ul>
+    <input type="text" id="task-input" placeholder="Add a new task">
+    <select id="assignee-select" multiple>
+      <option value="user1">User 1</option>
+      <option value="user2">User 2</option>
+      <option value="user3">User 3</option>
+    </select>
+    <button id="add-task-btn">Add Task</button>
+
+    <!-- User Task Section -->
+    <div id="user-task-section">
+      <h2 style="color: #333333;">User Tasks</h2>
+      <ul id="user-task-list"></ul>
+    </div>
+
+    <script>
+      const taskInput = document.getElementById("task-input");
+      const addTaskBtn = document.getElementById("add-task-btn");
+      const taskList = document.getElementById("task-list");
+      const userTaskList = document.getElementById("user-task-list");
+      const assigneeSelect = document.getElementById("assignee-select");
+
+      // Function to add a new task
+      function addTask() {
+        const taskText = taskInput.value;
+        const assignees = Array.from(assigneeSelect.selectedOptions).map(option => option.value);
+
+        if (taskText.trim() !== "" && assignees.length > 0) {
+          assignees.forEach(assignee => {
+            const taskItem = document.createElement("li");
+            taskItem.innerHTML = `
+              <span>${assignee}: ${taskText}</span>
+              <button class="delete-btn">Delete</button>
+            `;
+
+            // Add event listener to delete task button
+            const deleteBtn = taskItem.querySelector(".delete-btn");
+            deleteBtn.addEventListener("click", function () {
+              taskItem.remove();
+            });
+
+            taskItem.style.display = "flex";
+            taskItem.style.justifyContent = "space-between";
+            taskItem.style.alignItems = "center";
+            taskItem.style.marginBottom = "10px";
+
+            deleteBtn.style.backgroundColor = "#f44336";
+            deleteBtn.style.color = "#ffffff";
+            deleteBtn.style.padding = "5px 10px";
+            deleteBtn.style.border = "none";
+            deleteBtn.style.borderRadius = "4px";
+            deleteBtn.style.cursor = "pointer";
+            deleteBtn.style.fontSize = "12px";
+
+            userTaskList.appendChild(taskItem);
+          });
+
+          taskInput.value = "";
+        }
+      }
+
+      // Add event listener to the "Add Task" button
+      addTaskBtn.addEventListener("click", addTask);
+
+      // Add event listener to the input field to add a task on pressing enter
+      taskInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          addTask();
+        }
+      });
+    </script>
+  </div>
+</body>
+</html>
